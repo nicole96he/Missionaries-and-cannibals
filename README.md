@@ -40,6 +40,7 @@ In this section, i build model in CannibalProblem.py. In this class, _init_ is u
 BFS always used in finding shortest path or in small scale path-searching. BFS always find best dolution because BFS proceeds level by level.
 
 **Code implement:**
+
 The basic idea of bfs:
     --add starting node to new quene;
     --create quene to store future visited sequence;
@@ -54,15 +55,18 @@ The basic idea of bfs:
     --mark where node was reached from
     
 **Using a linked list to keep track of which states have been visited is a poor choice. Why?**
+
 Linked list put elements in order, so track a specific element has to search in order, which will waste much time. The least time search cost using linked list is O(n). However, I use set to keep track of which states have been visited. Hashtable() search is quite easy and cost less time, the least time it cost is O(1). So, using linked list to keep track states which have been visited is a poor choice.
 
 ## Memoizing depth-first search
 DFS first traverses nodes going through one adjacent of root, then next adjacent.
 **Dose memorizing dfs save significant memory with respect to bfs? Why or Why not?**
+
 No. From my perspective, their memories are not much different. In this situation, both bfs and memorizing dfs store states that has been visited. However, in some extreme, their memories may vary a lot. When the graph is extra wide, BFS would use more memory than DFS. When the graph is extremely deep, DFS would use more memory than BFS.
 
 ## Path-checking depth-first search
 **code implement:**
+
 --create a set() to store visited nodes;
 *if* current state is goal state: success
   --backchain
@@ -70,6 +74,7 @@ No. From my perspective, their memories are not much different. In this situatio
   --call dfs  (recursive)
   
  **backchain code:**
+ 
  Args: node, solution (node represents goal node)
  return: path
  --create path tuple;
@@ -80,23 +85,28 @@ No. From my perspective, their memories are not much different. In this situatio
  
  
 **Dose path-checking depth-first search save significant memory with respect to breadth-first search?**
+
 Yes. For breadth-first search, the memory is the size of set(), which store all visited nodes unrepeatedly. For path-checking DFS, the memory is size of set(),which only store current path nodes. Obviously, the memory of path-checking DFS is much smaller than that of BFS.
 
 **This picture in appendex[1] is an example of a graph where path-checking DFS takes much more run-time than breadth-first search:**
+
 In this graph, if using BFS, we can find goal node very quickly. Because bfs proceeds level by level, it will find goal node in level 2. However, if using path-checking dfs, it would cost much more run time. Because the end node is close to root, but not in first few subtrees explored bu dfs, then dfs reaches that node very late. So in this graph, dfs costs much more time.
 
 ## Iterative deepening search
 **code implement:**
+
 for each depth in range(depth_limit):
 --call dfs function
 --if path is not empty: return
 
 **Would it make sense to use path-checking dfs or memoizing dfs in iterative deepening search or bfs?**
+
 Personally, I think bfs is the best obviously because it costs least time and always return optimal solution. However, bfs uses much memory comparing to dfs. 
 For run time, bfs costs least time, and path-checking dfs costs most time. The speed of ids is between path-checking dfs and bfs. For memory, bfs uses more memory than others. Ids uses more memory than dfs. Iterative deepening search combines dfs's space-efficiency and bfs's fast search (especially for nodes closer to root).
 
 ## Discussion question: Lossy missionaries and cannibals
 **Considering the situation that no more than E missionaries could be eaten**
+
 The state for this peoblem would be *(M,C,E,B)*, where M represents total number of missionaries, C represents total number of cannibals, E represents left number of missionaries that could be eaten, B represents total number of boats.
 For implementing a solution, considering the states change, get_successors function and safe function(used to check if the state is legal) need to be changed. 
 For get_successors function, based on original 10 states, in the state which number of cannibals exceeds number of missionaries, the current number of missionaries has to subtract E if current number of missionaries is not less than E. If current number of missionaries is less than E, change current number of missionaries as 0.
